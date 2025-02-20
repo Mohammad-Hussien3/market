@@ -22,7 +22,7 @@ class Webhook(APIView):
         chat_id = data['message']['chat']['id']
         text = data['message']['text']
 
-        profile = Profile.objects.get_or_create(telegram_id=chat_id)
+        profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
         if 'first_name' in data['message']['chat']:
             profile.first_name = data['message']['chat']['first_name']
         

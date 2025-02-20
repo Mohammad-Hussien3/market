@@ -23,13 +23,12 @@ class Webhook(APIView):
         text = data['message']['text']
 
         profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
-        if created:
-            profile.first_name = data['message']['chat']['first_name']
-            profile.save()
-            profile.last_name = data['message']['chat']['last_name']
-            profile.save()
-            profile.username = data['message']['chat']['username']
-            profile.save()
+        profile.first_name = data['message']['chat']['first_name']
+        profile.save()
+        profile.last_name = data['message']['chat']['last_name']
+        profile.save()
+        profile.username = data['message']['chat']['username']
+        profile.save()
 
         if text == '/start':
             self.send_store_button(chat_id)

@@ -11,7 +11,7 @@ from item.serializers import CategorySerializer
 
 BOT_TOKEN = "7706720810:AAHtk9RCd9nKr4a0nNWNPr2zhh4dOJE3SaQ"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-WEB_APP_URL = "https://market-cwgu.onrender.com/bot/homepage/"
+WEB_APP_URL = "https://nehad223.github.io/vite1/"
 
 
 class Webhook(APIView):
@@ -22,7 +22,7 @@ class Webhook(APIView):
         chat_id = data['message']['chat']['id']
         text = data['message']['text']
 
-        profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
+        profile = Profile.objects.get_or_create(telegram_id=chat_id)
         if 'first_name' in data['message']['chat']:
             profile.first_name = data['message']['chat']['first_name']
         

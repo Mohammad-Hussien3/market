@@ -60,5 +60,5 @@ class CategoryPagination(PageNumberPagination):
 class HomePage(ListAPIView):
 
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('name')
     pagination_class = CategoryPagination

@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from usermanagament.models import Profile
 from item.models import Category
+from rest_framework.pagination import PageNumberPagination
 from item.serializers import CategorySerializer
 
 
@@ -21,14 +22,13 @@ class Webhook(APIView):
         chat_id = data['message']['chat']['id']
         text = data['message']['text']
 
-        profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
-        if created:
-            profile.first_name = data['message']['chat']['first_name']
-            profile.save()
-            profile.last_name = data['message']['chat']['last_name']
-            profile.save()
-            profile.username = data['message']['chat']['username']
-            profile.save()
+        profile = Profile.objects.get_or_create(telegram_id=chat_id)
+        profile.first_name = data['message']['chat']['first_name']
+        profile.save()
+        profile.last_name = data['message']['chat']['last_name']
+        profile.save()
+        profile.username = data['message']['chat']['username']
+        profile.save()
 
         if text == '/start':
             self.send_store_button(chat_id)
@@ -49,7 +49,12 @@ class Webhook(APIView):
         requests.post(TELEGRAM_API_URL, json=payload)
 
 
+class CategoryPagination(PageNumberPagination):
+    page_size = 10
+
+
 class HomePage(ListAPIView):
 
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+    pagination_class = CategoryPagination

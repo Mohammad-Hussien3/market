@@ -23,11 +23,15 @@ class Webhook(APIView):
         text = data['message']['text']
 
         profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
-        profile.first_name = data['message']['chat']['first_name']
-        profile.save()
-        profile.last_name = data['message']['chat']['last_name']
-        profile.save()
-        profile.username = data['message']['chat']['username']
+        if 'first_name' in data['message']['chat']:
+            profile.first_name = data['message']['chat']['first_name']
+        
+        if 'last_name' in data['message']['chat']:
+            profile.last_name = data['message']['chat']['last_name']
+
+        if 'username' in data['message']['chat']:
+            profile.username = data['message']['chat']['username']
+
         profile.save()
 
         if text == '/start':

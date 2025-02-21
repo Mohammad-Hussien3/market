@@ -57,9 +57,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'market.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    'https://nehad223.github.io'
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 
 TEMPLATES = [

@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from usermanagament.models import Profile
-from item.models import Category
-from rest_framework.pagination import PageNumberPagination
-from item.serializers import CategorySerializer
+from item.models import Category, Item
+from item.serializers import LimitedCategorySerializer
+from django.db.models import Prefetch
 
 
 BOT_TOKEN = "7706720810:AAHtk9RCd9nKr4a0nNWNPr2zhh4dOJE3SaQ"
@@ -53,12 +53,14 @@ class Webhook(APIView):
         requests.post(TELEGRAM_API_URL, json=payload)
 
 
-class CategoryPagination(PageNumberPagination):
-    page_size = 10
-
-
 class HomePage(ListAPIView):
+    serializer_class = LimitedCategorySerializer
 
-    serializer_class = CategorySerializer
-    queryset = Category.objects.all().order_by('name')
-    pagination_class = CategoryPagination
+    def get_queryset(self):
+        queryset = Category.objects.all().order_by('name')
+
+        queryset = queryset.prefetch_related(
+            Prefetch('items', queryset=Item.objects.all()[:10], to_attr='limited_items')
+        )
+
+        return queryset

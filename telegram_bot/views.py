@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView
 from usermanagament.models import Profile
 from item.models import Category, Item
 from item.serializers import LimitedCategorySerializer
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
 
 
 BOT_TOKEN = "7706720810:AAHtk9RCd9nKr4a0nNWNPr2zhh4dOJE3SaQ"
@@ -57,10 +57,10 @@ class HomePage(ListAPIView):
     serializer_class = LimitedCategorySerializer
 
     def get_queryset(self):
-        queryset = Category.objects.all().order_by('name')
+        queryset = Category.objects.annotate(num_items=Count('items')).filter(num_items__gt=0).order_by('name')
 
         queryset = queryset.prefetch_related(
-            Prefetch('items', queryset=Item.objects.all()[:10], to_attr='limited_items')
+            Prefetch('items', queryset=Item.objects.order_by('id')[:10], to_attr='limited_items')
         )
 
         return queryset

@@ -11,7 +11,7 @@ from item.serializers import CategorySerializer
 
 BOT_TOKEN = "7706720810:AAHtk9RCd9nKr4a0nNWNPr2zhh4dOJE3SaQ"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-WEB_APP_URL = "https://nehad223.github.io/vite1/"
+WEB_APP_URL = "https://nehad223.github.io/dsad/"
 
 
 class Webhook(APIView):

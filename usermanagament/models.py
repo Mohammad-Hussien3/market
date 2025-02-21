@@ -5,6 +5,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    
+    points = models.IntegerField(default=0)
+
     def __str__(self):
         return self.username if self.username else str(self.telegram_id)

@@ -19,36 +19,81 @@ class Webhook(APIView):
     def post(self, request):
         
         data = json.loads(request.body)
-        chat_id = data['message']['chat']['id']
-        text = data['message']['text']
 
-        profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
-        if 'first_name' in data['message']['chat']:
-            profile.first_name = data['message']['chat']['first_name']
-        
-        if 'last_name' in data['message']['chat']:
-            profile.last_name = data['message']['chat']['last_name']
+        if "message" in data:
+            chat_id = data['message']['chat']['id']
+            text = data['message']['text']
 
-        if 'username' in data['message']['chat']:
-            profile.username = data['message']['chat']['username']
+            args = data.get('message', {}).get('text', '').split()
+            referrer_id = args[1] if len(args) > 1 else None
 
-        profile.save()
+            profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
 
-        if text == '/start':
-            self.send_store_button(chat_id)
+            if referrer_id != None:
+                text = args[0]
+                if profile.referred_by == None:
+                    profile.referred_by = referrer_id
+                    referred_profile = Profile.objects.get(telegram_id=referrer_id)
+                    referred_profile.points += 10
+                    referred_profile.save()
+
+            if 'first_name' in data['message']['chat']:
+                profile.first_name = data['message']['chat']['first_name']
+            
+            if 'last_name' in data['message']['chat']:
+                profile.last_name = data['message']['chat']['last_name']
+
+            if 'username' in data['message']['chat']:
+                profile.username = data['message']['chat']['username']
+
+            profile.save()
+
+            if text == "/start":
+                self.send_welcome_message(chat_id)
+                self.send_menu(chat_id)
+
+        elif "callback_query" in data:
+            callback_data = data["callback_query"]["data"]
+            chat_id = data["callback_query"]["message"]["chat"]["id"]
+            self.handle_callback(chat_id, callback_data)
 
         return JsonResponse({'status': 'ok'})
     
-    def send_store_button(self, chat_id):
-        message = f'مرحبًا بك في المتجر! 🛒 اضغط على الزر لفتح المتجر.'
+    def send_welcome_message(self, chat_id):
+        message = "مرحبًا بك في البوت! 😊\nاستخدم الأوامر التالية للتفاعل معي:"
         payload = {
-            'chat_id': chat_id,
-            'text': message,
-            'reply_markup': {
-                'inline_keyboard': [[
-                    {'text': '🛍️ افتح المتجر', 'web_app': {'url': WEB_APP_URL}}
-                ]]
-            }
+            "chat_id": chat_id,
+            "text": message
+        }
+        requests.post(TELEGRAM_API_URL, json=payload)
+
+    def send_menu(self, chat_id):
+        commands = [
+            [{"text": "🛍️ زيارة المتجر للشراء", "web_app" : {"url": WEB_APP_URL}}],
+            [{"text": "📍 عرض نقاطي", "callback_data": "points"}],
+            [{"text": "📢 احصل على رابط الإحالة", "callback_data": "referral"}],
+            [{"text": "📌 عرض الطلبات المعلقة", "callback_data": "pending_orders"}],
+            [{"text": "🛒 عرض طلباتي السابقة", "callback_data": "my_orders"}],
+        ]
+
+        payload = {
+            "chat_id": chat_id,
+            "text": "اختر أحد الخيارات:",
+            "reply_markup": {"inline_keyboard": commands}
+        }
+        requests.post(TELEGRAM_API_URL, json=payload)
+    
+    def handle_callback(self, chat_id, callback_data):
+        if callback_data == "points":
+            self.send_points(chat_id)
+
+    def send_points(self, chat_id):
+        profile = Profile.objects.get(telegram_id=chat_id)
+        message = f"📍 لديك {profile.points} نقاط."
+
+        payload = {
+            "chat_id": chat_id,
+            "text": message
         }
         requests.post(TELEGRAM_API_URL, json=payload)
 

@@ -9,7 +9,9 @@ class ItemSerializer(serializers.ModelSerializer):
 
         
 class LimitedCategorySerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many=True, source='limited_items')
+    limited_student_items = ItemSerializer(many=True, read_only=True)
+    limited_doctor_items = ItemSerializer(many=True, read_only=True)
+
     class Meta:
         model = Category
         fields = '__all__'

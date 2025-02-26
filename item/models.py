@@ -17,6 +17,15 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
     photo = models.ImageField(upload_to='', blank=True, null=True)
     
+    STUDENT = 'student'
+    DOCTOR = 'doctor'
+
+    ITEM_TYPES = [
+        (STUDENT, 'Student'),
+        (DOCTOR, 'Doctor'),
+    ]
+    item_type = models.CharField(max_length=10, choices=ITEM_TYPES, null=False, blank=False)
+
     class Meta:
         ordering = ['name']
 

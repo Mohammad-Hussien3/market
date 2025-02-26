@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Item
+from .models import Category, Item, Order, PackageItem, Package
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -22,3 +22,22 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = ItemSerializer(many=True)
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+
+class PackageItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PackageItem
+        fields = '__all__'
+
+
+class PackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Package
+        fields = ['id', 'name']

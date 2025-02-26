@@ -1,6 +1,6 @@
-from rest_framework.generics import RetrieveAPIView
-from item.models import Category, Item
-from item.serializers import ItemSerializer
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from item.models import Category, Item, Package
+from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -23,3 +23,18 @@ class GetItem(RetrieveAPIView):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
     lookup_field = 'id'
+
+
+class GetPackages(ListAPIView):
+
+    serializer_class = PackageSerializer
+    queryset = Package.objects.all()
+
+
+class GetPackagesItems(ListAPIView):
+    serializer_class = PackageItemSerializer
+
+    def get_queryset(self):
+        package_id = self.kwargs.get('id')
+        package = get_object_or_404(Package, id=package_id)
+        return package.items.all()

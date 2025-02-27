@@ -46,6 +46,7 @@ class Order(models.Model):
 
 class Package(models.Model):
     name = models.CharField(max_length=255)
+    price = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['name']
@@ -53,7 +54,6 @@ class Package(models.Model):
 
 class PackageItem(models.Model):
     name = models.CharField(max_length=255)
-    price = models.IntegerField()
     description = models.CharField(max_length=300, blank=True, null=True)
     package = models.ForeignKey(Package, on_delete=models.CASCADE, related_name='items')
     photo = models.ImageField(upload_to='', blank=True, null=True)

@@ -121,9 +121,15 @@ class HomePage(ListAPIView):
         student_items = Item.objects.filter(item_type='student').order_by('id')[:10]
         doctor_items = Item.objects.filter(item_type='doctor').order_by('id')[:10]
 
-        queryset = queryset.prefetch_related(
-            Prefetch('items', queryset=student_items, to_attr='limited_student_items'),
-            Prefetch('items', queryset=doctor_items, to_attr='limited_doctor_items')
-        )
+        prefetch_list = []
+
+        if student_items.exists():
+            prefetch_list.append(Prefetch('items', queryset=student_items, to_attr='limited_student_items'))
+
+        if doctor_items.exists():
+            prefetch_list.append(Prefetch('items', queryset=doctor_items, to_attr='limited_doctor_items'))
+
+        if prefetch_list:
+            queryset = queryset.prefetch_related(*prefetch_list)
 
         return queryset

@@ -15,6 +15,16 @@ class LimitedCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if not data.get('limited_student_items'):
+            data.pop('limited_student_items', None)
+        if not data.get('limited_doctor_items'):
+            data.pop('limited_doctor_items', None)
+
+        return data
 
 
 class CategorySerializer(serializers.ModelSerializer):

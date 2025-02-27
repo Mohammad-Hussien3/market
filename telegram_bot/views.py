@@ -116,20 +116,11 @@ class HomePage(ListAPIView):
     serializer_class = LimitedCategorySerializer
 
     def get_queryset(self):
-        queryset = Category.objects.annotate(num_items=Count('items')).filter(num_items__gt=0).order_by('name')
+        queryset = Category.objects.annotate(num_items=Count('items')).filter(num_items__gt=0).order_by('id')
 
-        student_items = Item.objects.filter(item_type='student').order_by('id')[:10]
-        doctor_items = Item.objects.filter(item_type='doctor').order_by('id')[:10]
-
-        prefetch_list = []
-
-        if student_items.exists():
-            prefetch_list.append(Prefetch('items', queryset=student_items, to_attr='limited_student_items'))
-
-        if doctor_items.exists():
-            prefetch_list.append(Prefetch('items', queryset=doctor_items, to_attr='limited_doctor_items'))
-
-        if prefetch_list:
-            queryset = queryset.prefetch_related(*prefetch_list)
+        queryset = queryset.prefetch_related(
+            Prefetch('items', queryset=Item.objects.filter(item_type='student').order_by('id'), to_attr='limited_student_items'),
+            Prefetch('items', queryset=Item.objects.filter(item_type='doctor').order_by('id'), to_attr='limited_doctor_items')
+        )
 
         return queryset

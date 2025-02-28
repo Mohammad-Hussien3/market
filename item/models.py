@@ -1,5 +1,6 @@
 from django.db import models
 from usermanagament.models import Profile
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -15,7 +16,7 @@ class Item(models.Model):
     price = models.IntegerField()
     description = models.CharField(max_length=300, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
-    photo = models.ImageField(upload_to='', blank=True, null=True)
+    photo = CloudinaryField('image', null=False, blank=False)
     
     STUDENT = 'student'
     DOCTOR = 'doctor'

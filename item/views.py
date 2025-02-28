@@ -38,3 +38,17 @@ class GetPackagesItems(ListAPIView):
         package_id = self.kwargs.get('id')
         package = get_object_or_404(Package, id=package_id)
         return package.items.all()
+
+
+class GetItems(ListAPIView):
+
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        
+        for item in response.data:
+            item['category'] = Category.objects.get(id=item['category']).name
+        
+        return response

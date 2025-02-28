@@ -11,7 +11,7 @@ from django.db.models import Prefetch, Count
 
 BOT_TOKEN = "7706720810:AAHtk9RCd9nKr4a0nNWNPr2zhh4dOJE3SaQ"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-WEB_APP_URL = "https://nehad223.github.io/dsad/"
+WEB_APP_URL = "https://nehad223.github.io/dsad/#/dsad/"
 
 
 class Webhook(APIView):

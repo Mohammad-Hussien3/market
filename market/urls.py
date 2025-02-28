@@ -9,5 +9,3 @@ urlpatterns = [
     path('bot/', include('telegram_bot.urls')),
     path('', include('item.urls')),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

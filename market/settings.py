@@ -130,11 +130,13 @@ STATIC_URL = 'static/'
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import os
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dgocqho3b',
-    'API_KEY': '692564515676478',
-    'API_SECRET': 'API_SECRET',
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dgocqho3b'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '692564515676478'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
 }
 
 cloudinary.config(

@@ -4,7 +4,7 @@ from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=False, null=False)
     description = models.CharField(max_length=300, blank=True, null=True)
 
     class Meta:
@@ -12,11 +12,12 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=255)
-    price = models.IntegerField()
+    name = models.CharField(max_length=255, blank=False, null=False)
+    price = models.IntegerField(default=0)
     description = models.CharField(max_length=300, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
     photo = CloudinaryField('image', null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     STUDENT = 'student'
     DOCTOR = 'doctor'
@@ -28,7 +29,7 @@ class Item(models.Model):
     item_type = models.CharField(max_length=10, choices=ITEM_TYPES, null=False, blank=False)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-created_at']
 
         
     def __str__(self):
@@ -46,15 +47,16 @@ class Order(models.Model):
     
 
 class Package(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=False, null=False)
     price = models.IntegerField(default=0)
+    photo = CloudinaryField('image')
 
     class Meta:
         ordering = ['name']
 
 
 class PackageItem(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=False, null=False)
     description = models.CharField(max_length=300, blank=True, null=True)
     package = models.ForeignKey(Package, on_delete=models.CASCADE, related_name='items')
     photo = CloudinaryField('image', null=False, blank=False)
@@ -67,3 +69,8 @@ class PackageItem(models.Model):
         
     def __str__(self):
         return self.name
+
+
+class PackageOrder(models.Model):
+    package = models.ForeignKey(Package, on_delete=models.CASCADE, related_name='orders')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="packageOrders")

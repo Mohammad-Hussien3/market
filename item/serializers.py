@@ -5,7 +5,7 @@ from .models import Category, Item, Order, PackageItem, Package
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = '__all__'
+        exclude = ('created_at',)
 
         
 class LimitedCategorySerializer(serializers.ModelSerializer):
@@ -29,6 +29,12 @@ class LimitedCategorySerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     items = ItemSerializer(many=True)
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    
+class NewCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'

@@ -1,6 +1,6 @@
-from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 from item.models import Category, Item, Package
-from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer
+from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer, NewCategorySerializer, CategorySerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -52,3 +52,36 @@ class GetItems(ListAPIView):
             item['category'] = Category.objects.get(id=item['category']).name
         
         return response
+
+
+class CreateItem(CreateAPIView):
+    serializer_class = ItemSerializer
+
+
+class CreateCategory(CreateAPIView):
+    serializer_class = NewCategorySerializer
+    queryset = Category.objects.all()
+
+
+class DeleteItem(DestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    lookup_field = 'id'
+
+
+class DeleteCategory(DestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'id'
+
+
+class UpdateItem(UpdateAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    lookup_field = 'id'
+
+
+class UpdateCategory(UpdateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = NewCategorySerializer
+    lookup_field = 'id'

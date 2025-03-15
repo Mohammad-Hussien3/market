@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#2umq+n%(h%qpr94x12+s@23!kgqvg43)#ey7bok4vhk8uxv74'
+SECRET_KEY = os.getenv('SECRET_KEY'),
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'https://market-cwgu.onrender.com']
 
 
 # Application definition
@@ -57,7 +59,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'market.urls'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'https://nehad223.github.io',
+    'http://localhost:3000',
+]
 
 
 
@@ -130,12 +135,11 @@ STATIC_URL = 'static/'
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import os
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dgocqho3b'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY', '692564515676478'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', '2TfqhRWfeexmENoghJY_wZCC9Xo'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
 cloudinary.config(

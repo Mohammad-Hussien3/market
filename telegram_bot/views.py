@@ -7,6 +7,8 @@ from usermanagament.models import Profile
 from item.models import Category, Item
 from item.serializers import LimitedCategorySerializer
 from django.db.models import Prefetch, Count
+from usermanagament.serializers import ProfileSerializer
+from rest_framework.views import Response, status
 
 
 BOT_TOKEN = "7840572100:AAE49wkw2i04ZwbGMVwOFuBK4qmNFCHyVDY"
@@ -127,3 +129,11 @@ class HomePage(ListAPIView):
         )
 
         return queryset
+    
+
+class GetProfile(APIView):
+
+    def get(self, request, telegramId):
+        profile = Profile.objects.get(telegram_id=telegramId)
+        jsonProfile = ProfileSerializer(profile).data
+        return Response(jsonProfile, status=status.HTTP_200_OK)

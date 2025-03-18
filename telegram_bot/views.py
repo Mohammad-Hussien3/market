@@ -77,7 +77,7 @@ class Webhook(APIView):
             [{'text': '📍 عرض نقاطي', 'callback_data': 'points'}],
             [{'text': '📢 احصل على رابط الإحالة', 'callback_data': 'referral'}],
             [{'text': '📌 عرض الطلبات المعلقة', 'callback_data': 'pending_orders'}],
-            [{'text': '🛒 عرض طلباتي السابقة', 'callback_data': 'my_orders'}],
+            [{'text': '🛒 سجل المشتريات', 'callback_data': 'my_orders'}],
         ]
 
         payload = {

@@ -1,5 +1,5 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
-from item.models import Category, Item, Package
+from item.models import Category, Item, Package, PackageItem
 from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer, NewCategorySerializer, CategorySerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,7 +13,7 @@ class AllItmes(APIView):
     def get(self, request, id, item_type):
         category = get_object_or_404(Category, id=id)
 
-        filtered_items = category.items.filter(item_type=item_type).order_by('id')
+        filtered_items = category.items.filter(item_type=item_type).order_by('-created_at')
 
         return Response(ItemSerializer(filtered_items, many=True).data, status=status.HTTP_200_OK)
 
@@ -60,7 +60,14 @@ class CreateItem(CreateAPIView):
 
 class CreateCategory(CreateAPIView):
     serializer_class = NewCategorySerializer
-    queryset = Category.objects.all()
+
+
+class CreatePackage(CreateAPIView):
+    serializer_class = PackageSerializer
+
+
+class CreatePackageItem(CreateAPIView):
+    serializer_class = PackageItemSerializer
 
 
 class DeleteItem(DestroyAPIView):
@@ -75,6 +82,18 @@ class DeleteCategory(DestroyAPIView):
     lookup_field = 'id'
 
 
+class DeletePackage(DestroyAPIView):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    lookup_field = 'id'
+
+
+class DeletePackageItem(DestroyAPIView):
+    queryset = PackageItem.objects.all()
+    serializer_class = PackageItemSerializer
+    lookup_field = 'id'
+
+
 class UpdateItem(UpdateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
@@ -84,4 +103,16 @@ class UpdateItem(UpdateAPIView):
 class UpdateCategory(UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = NewCategorySerializer
+    lookup_field = 'id'
+
+
+class UpdatePackage(UpdateAPIView):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    lookup_field = 'id'
+
+
+class UpdatePackageItem(UpdateAPIView):
+    queryset = PackageItem.objects.all()
+    serializer_class = PackageItemSerializer
     lookup_field = 'id'

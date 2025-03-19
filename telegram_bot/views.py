@@ -213,8 +213,8 @@ class HomePage(ListAPIView):
     def get_queryset(self):
         queryset = Category.objects.annotate(num_items=Count('items')).filter(num_items__gt=0).order_by('id')
 
-        student_items = Item.objects.filter(item_type='student').order_by('id')[:10]
-        doctor_items = Item.objects.filter(item_type='doctor').order_by('id')[:10]
+        student_items = Item.objects.filter(item_type='student').order_by('-created_at')[:10]
+        doctor_items = Item.objects.filter(item_type='doctor').order_by('-created_at')[:10]
 
         queryset = queryset.prefetch_related(
             Prefetch('items', queryset=student_items, to_attr='limited_student_items'),

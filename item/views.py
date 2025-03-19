@@ -1,7 +1,7 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
-from item.models import Category, Item, Package, PackageItem
-from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer, NewCategorySerializer, CategorySerializer
-from rest_framework.response import Response
+from item.models import Category, Item, Package, PackageItem, Order, PointItem
+from item.serializers import ItemSerializer, PackageSerializer, PackageItemSerializer, NewCategorySerializer, CategorySerializer, OrderSerializer, PointItemSerializer
+from rest_framework.views import Response, status
 from rest_framework import status
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
@@ -116,3 +116,16 @@ class UpdatePackageItem(UpdateAPIView):
     queryset = PackageItem.objects.all()
     serializer_class = PackageItemSerializer
     lookup_field = 'id'
+
+
+class GetOrders(APIView):
+
+    def get(self, request, telegram_id, status):
+        orders = Order.objects.filter(profile__telegram_id=telegram_id, status=status)
+        jsonOrders = OrderSerializer(orders, many=True).data
+        return Response(jsonOrders)
+
+
+class GetPointItmes(ListAPIView):
+    queryset = PointItem.objects.all()
+    serializer_class = PointItemSerializer

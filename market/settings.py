@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY'),
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'market-cwgu.onrender.com', 'api.telegram.org']
+ALLOWED_HOSTS = ['127.0.0.1', 'market-cwgu.onrender.com', 'api.telegram.org', 'weak-jars-count.loca.lt']
 
 
 # Application definition
@@ -120,11 +120,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Damascus'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

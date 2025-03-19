@@ -7,6 +7,8 @@ urlpatterns = [
     path('packages/', GetPackages.as_view(), name='getpackages'),
     path('packageitems/<int:id>/', GetPackagesItems.as_view(), name='package-items'),
     path('getitems/', GetItems.as_view(), name='getitems'),
+    path('getorders/<int:telegram_id>/<str:status>/', GetOrders.as_view(), name='getorders'),
+    path('getpointitems/', GetPointItmes.as_view(), name='getpointitems'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
     path('newcategory/', CreateCategory.as_view(), name='createitem'),

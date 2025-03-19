@@ -9,6 +9,7 @@ from item.serializers import LimitedCategorySerializer
 from django.db.models import Prefetch, Count
 from usermanagament.serializers import ProfileSerializer
 from rest_framework.views import Response, status
+from item.models import Order
 
 
 BOT_TOKEN = "7840572100:AAE49wkw2i04ZwbGMVwOFuBK4qmNFCHyVDY"
@@ -92,6 +93,10 @@ class Webhook(APIView):
             self.send_points(chat_id)
         elif callback_data == 'referral':
             self.send_referral(chat_id)
+        elif callback_data == 'pending_orders':
+            self.send_pending_orders(chat_id)
+        else:
+            self.send_my_orders(chat_id)
 
     def send_points(self, chat_id):
         profile = Profile.objects.get(telegram_id=chat_id)
@@ -113,6 +118,94 @@ class Webhook(APIView):
         }
         requests.post(TELEGRAM_API_URL, json=payload)
 
+    def send_pending_orders(self, chat_id):
+        orders = Order.objects.filter(profile__telegram_id=chat_id, status='pending')
+        if not orders.exists():
+            payload = {
+                "chat_id": chat_id,
+                "text": 'لا يوجد طلبات معلقة.',
+            }
+            requests.post(TELEGRAM_API_URL, json=payload)
+            return
+
+        message = 'الطلبات المعلقة\n\n'
+
+        idx = 1
+        for order in orders:
+            message += f'{idx}-\n'
+            idx += 1
+
+            message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
+
+            if order.active_type == "item":
+                message += "المشتريات :\n"
+                for order_item in order.orderitem_set.all():
+                    message += f"  - {order_item.quantity} × {order_item.item.name}\n"
+                message += f"السعر الكلي: {order.total_price_items}\n"
+
+            elif order.active_type == "point_item":
+                message += "المشتريات :\n"
+                for order_point_item in order.orderpointitem_set.all():
+                    message += f"  - {order_point_item.quantity} × {order_point_item.point_item.name}\n"
+                message += f"إجمالي النقاط: {order.total_points_items}\n"
+
+            elif order.active_type == "package":
+                message += f"المشتريات: {order.package.name}\n"
+                message += f"السعر : {order.package.price}\n"
+
+            message += '\n'
+
+        payload = {
+            "chat_id": chat_id,
+            "text": message,
+        }
+        requests.post(TELEGRAM_API_URL, json=payload)
+    
+    def send_my_orders(self, chat_id):
+        orders = Order.objects.filter(profile__telegram_id=chat_id, status='finished')
+        if not orders.exists():
+            payload = {
+                "chat_id": chat_id,
+                "text": 'لا يوجد مشتريات.',
+            }
+            requests.post(TELEGRAM_API_URL, json=payload)
+            return
+
+        message = 'سجل المشتريات\n\n'
+        idx = 1
+        for order in orders:
+            message += f'{idx}-\n'
+            idx += 1
+
+            message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
+            message += f"تاريخ الشراء: {order.purchased_at.strftime('%Y-%m-%d %H:%M')}\n"
+
+            print(order.purchased_at)
+
+            if order.active_type == "item":
+                message += "المشتريات :\n"
+                for order_item in order.orderitem_set.all():
+                    message += f"  - {order_item.quantity} × {order_item.item.name}\n"
+                message += f"السعر الكلي: {order.total_price_items}\n"
+
+            elif order.active_type == "point_item":
+                message += "المشتريات :\n"
+                for order_point_item in order.orderpointitem_set.all():
+                    message += f"  - {order_point_item.quantity} × {order_point_item.point_item.name}\n"
+                message += f"إجمالي النقاط: {order.total_points_items}\n"
+
+            elif order.active_type == "package":
+                message += f"المشتريات: {order.package.name}\n"
+                message += f"السعر : {order.package.price}\n"
+
+            message += '\n'
+
+        payload = {
+            "chat_id": chat_id,
+            "text": message,
+        }
+        requests.post(TELEGRAM_API_URL, json=payload)
+
 
 class HomePage(ListAPIView):
     serializer_class = LimitedCategorySerializer
@@ -129,11 +222,3 @@ class HomePage(ListAPIView):
         )
 
         return queryset
-    
-
-class GetProfile(APIView):
-
-    def get(self, request, telegramId):
-        profile = Profile.objects.get(telegram_id=telegramId)
-        jsonProfile = ProfileSerializer(profile).data
-        return Response(jsonProfile, status=status.HTTP_200_OK)

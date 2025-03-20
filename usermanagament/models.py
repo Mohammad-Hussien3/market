@@ -10,7 +10,7 @@ class Profile(models.Model):
     username = models.CharField(max_length=255, blank=True, null=True)
     points = models.IntegerField(default=0)
     referral_link = models.CharField(max_length=500, blank=True, null=True)
-    referred_by = models.IntegerField(default=None, null=True)
+    referred_by = models.IntegerField(default=None, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.referral_link:

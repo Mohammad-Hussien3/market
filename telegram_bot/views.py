@@ -222,3 +222,11 @@ class HomePage(ListAPIView):
         )
 
         return queryset
+
+
+class GetPoints(APIView):
+
+    def get(self, request, telegram_id):
+        profile = Profile.objects.get(telegram_id=telegram_id)
+        points = {'points' : profile.points}
+        return Response(points, status=status.HTTP_200_OK)

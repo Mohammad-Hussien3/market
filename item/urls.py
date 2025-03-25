@@ -2,13 +2,14 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('category/<int:id>/<str:item_type>/', AllItmes.as_view(), name='allitems'),
+    path('category/<int:id>/<str:item_type>/', CategoryItems.as_view(), name='categoryitems'),
     path('item/<int:id>/', GetItem.as_view(), name='getitem'),
     path('packages/', GetPackages.as_view(), name='getpackages'),
     path('packageitems/<int:id>/', GetPackagesItems.as_view(), name='package-items'),
-    path('getitems/', GetItems.as_view(), name='getitems'),
+    path('getitems/', AllItems.as_view(), name='allitems'),
     path('getorders/<int:telegram_id>/<str:status>/', GetOrders.as_view(), name='getorders'),
     path('getpointitems/', GetPointItmes.as_view(), name='getpointitems'),
+    path('typeitems/<str:item_type>/', ItemTypeItems.as_view(), name='itemtypeitems'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
     path('newcategory/', CreateCategory.as_view(), name='createitem'),

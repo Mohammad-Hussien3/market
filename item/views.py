@@ -5,10 +5,11 @@ from rest_framework.views import Response, status
 from rest_framework import status
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
+import json
 
 # Create your views here.
 
-class AllItmes(APIView):
+class CategoryItems(APIView):
 
     def get(self, request, id, item_type):
         category = get_object_or_404(Category, id=id)
@@ -40,7 +41,7 @@ class GetPackagesItems(ListAPIView):
         return package.items.all()
 
 
-class GetItems(ListAPIView):
+class AllItems(ListAPIView):
 
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
@@ -129,3 +130,14 @@ class GetOrders(APIView):
 class GetPointItmes(ListAPIView):
     queryset = PointItem.objects.all()
     serializer_class = PointItemSerializer
+
+
+class ItemTypeItems(ListAPIView):
+
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        item_type = self.kwargs.get('item_type')
+        items = Item.objects.filter(item_type=item_type)
+        return items
+    

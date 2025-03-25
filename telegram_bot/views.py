@@ -7,7 +7,6 @@ from usermanagament.models import Profile
 from item.models import Category, Item
 from item.serializers import LimitedCategorySerializer
 from django.db.models import Prefetch, Count
-from usermanagament.serializers import ProfileSerializer
 from rest_framework.views import Response, status
 from item.models import Order
 

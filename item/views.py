@@ -15,7 +15,7 @@ class CategoryItems(APIView):
     def get(self, request, id, item_type):
         category = get_object_or_404(Category, id=id)
 
-        filtered_items = category.items.filter(item_type=item_type).order_by('-created_at')
+        filtered_items = category.items.all().order_by('-created_at')
 
         return Response(ItemSerializer(filtered_items, many=True).data, status=status.HTTP_200_OK)
 

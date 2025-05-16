@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Item, Order, PackageItem, Package, PointItem, OrderItem, OrderPointItem
+from .models import Category, Item, Order, Package, PointItem, OrderItem, OrderPointItem, OrderPackage
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -46,12 +46,6 @@ class NewCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PackageItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PackageItem
-        fields = '__all__'
-
-
 class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
@@ -80,32 +74,35 @@ class OrderPointItemSerializer(serializers.ModelSerializer):
         return representation
     
     
+class OrderPackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderPackage
+        fields = ['quantity']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['package_name'] = instance.package.name
+        return representation
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    item = OrderItemSerializer(source='orderitem_set', many=True)
-    point_item = OrderPointItemSerializer(source='orderpointitem_set', many=True)
-    package = PackageSerializer()
+    items = OrderItemSerializer(source='orderitem_set', many=True)
+    point_items = OrderPointItemSerializer(source='orderpointitem_set', many=True)
+    packages = OrderPackageSerializer(source='orderpackage_set', many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'profile', 'status', 'created_at', 'item', 'point_item', 'package', 'active_type']
+        fields = ['id', 'profile', 'status', 'created_at', 'items', 'purchased_at', 'point_items', 'packages', 'active_type']
 
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         
-        if instance.active_type == 'item':
-            representation['active'] = representation['item']
-            representation['price'] = instance.total_price_items
-        elif instance.active_type == 'point_item':
-            representation['active'] = representation['point_item']
-            representation['points'] = instance.total_points_items
-        elif instance.active_type == 'package':
-            representation['active'] = representation['package']['name']
-            representation['price'] = representation['package']['price']
+        if instance.active_type == 'price':
+            representation['price'] = instance.total_price
+        elif instance.active_type == 'point':
+            representation['points'] = instance.total_points
 
-            
         del representation['item']
         del representation['point_item']
         del representation['package']

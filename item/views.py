@@ -129,6 +129,13 @@ class Search(APIView):
         return Response(ItemSerializer(items, many=True).data, status=status.HTTP_200_OK)
     
 
+class SearchPackage(APIView):
+
+    def get(self, request, text):
+        items = Package.objects.filter(name__icontains=text)
+        return Response(PackageSerializer(items, many=True).data, status=status.HTTP_200_OK)
+    
+
 class CreateOrder(APIView):
 
     def post(self, request):

@@ -13,8 +13,8 @@ class Category(models.Model):
     DOCTOR = 'doctor'
 
     ITEM_TYPES = [
-        (STUDENT, 'Student'),
-        (DOCTOR, 'Doctor'),
+        (STUDENT, 'student'),
+        (DOCTOR, 'doctor'),
     ]
     category_type = models.CharField(max_length=10, choices=ITEM_TYPES, null=False, blank=False)
 

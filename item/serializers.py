@@ -15,8 +15,7 @@ class PointItemSerializer(serializers.ModelSerializer):
 
 
 class LimitedCategorySerializer(serializers.ModelSerializer):
-    limited_student_items = ItemSerializer(many=True, read_only=True)
-    limited_doctor_items = ItemSerializer(many=True, read_only=True)
+    items = ItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
@@ -25,10 +24,8 @@ class LimitedCategorySerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
-        if not data.get('limited_student_items'):
-            data.pop('limited_student_items', None)
-        if not data.get('limited_doctor_items'):
-            data.pop('limited_doctor_items', None)
+        if not data.get('items'):
+            data.pop('items', None)
 
         return data
 

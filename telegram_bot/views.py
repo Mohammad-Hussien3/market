@@ -220,4 +220,36 @@ class GetPoints(APIView):
     def get(self, request, telegram_id):
         profile = Profile.objects.get(telegram_id=telegram_id)
         points = {'points' : profile.points}
+        
         return Response(points, status=status.HTTP_200_OK)
+    
+
+class GetUserPhotoAPIView(APIView):
+
+    def get(self, request, user_id):
+
+        url = f'https://api.telegram.org/bot{BOT_TOKEN}/getUserProfilePhotos'
+        params = {
+            'user_id': user_id,
+            'limit': 1
+        }
+        res = requests.get(url, params=params)
+        data = res.json()
+
+        if not data.get('ok') or data['result']['total_count'] == 0:
+            return Response({'error': 'No profile photo found'}, status=status.HTTP_404_NOT_FOUND)
+
+        file_id = data['result']['photos'][0][0]['file_id']
+
+        file_info_url = f'https://api.telegram.org/bot{BOT_TOKEN}/getFile'
+        file_info_res = requests.get(file_info_url, params={'file_id': file_id})
+        file_info = file_info_res.json()
+
+        if not file_info.get('ok'):
+            return Response({'error': 'Failed to get file info'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        file_path = file_info['result']['file_path']
+
+        photo_url = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file_path}'
+
+        return Response({'photo_url': photo_url})

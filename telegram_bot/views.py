@@ -25,7 +25,9 @@ class Webhook(APIView):
         if "message" in data:
             chat_id = data['message']['chat']['id']
             text = data['message']['text']
-
+            if text != '/start':
+                return
+            
             args = data.get('message', {}).get('text', '').split()
             referrer_id = args[1] if len(args) > 1 else None
 

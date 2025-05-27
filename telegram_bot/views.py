@@ -11,7 +11,7 @@ from rest_framework.views import Response, status
 from item.models import Order
 
 
-BOT_TOKEN = "7756641451:AAH83y2XqQfLXmaDfjnErT4z5lDNeoYpDA4"
+BOT_TOKEN = "8106559526:AAE5iBsXiXcpSf_r8ctqKoRNhJfjVEQ1OgA"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 WEB_APP_URL = "https://nehad223.github.io/dsad/#/dsad/"
 
@@ -22,12 +22,13 @@ class Webhook(APIView):
         
         data = json.loads(request.body)
 
+        print(data)
         if "message" in data:
             chat_id = data['message']['chat']['id']
             text = data['message'].get('text', '').strip()
 
             if text.lower() != '/start':
-                return JsonResponse({'status': 'error', 'message': 'الرجاء إرسال /start فقط'}, status=400)
+                return JsonResponse({'status': 'ignored', 'message': 'Only /start is handled'}, status=200)
 
             args = text.split()
             referrer_id = args[1] if len(args) > 1 else None

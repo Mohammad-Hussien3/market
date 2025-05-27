@@ -25,4 +25,5 @@ urlpatterns = [
     path('edititem/<int:id>/', UpdateItem.as_view(), name='edititem'),
     path('editcategory/<int:id>/', UpdateCategory.as_view(), name='editcategory'),
     path('editpackage/<int:id>/', UpdatePackage.as_view(), name='editpackage'),
+    path('global-points/update/', UpdateGlobalPointsView.as_view(), name='update-global-points'),
 ]

@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from usermanagament.models import Profile
-from item.models import Category, Item
+from item.models import Category, GlobalPoints
 from item.serializers import LimitedCategorySerializer
-from django.db.models import Prefetch, Count
+from django.db.models import Count
 from rest_framework.views import Response, status
 from item.models import Order
 
@@ -38,7 +38,8 @@ class Webhook(APIView):
                     if profile.referred_by == None:
                         profile.referred_by = referrer_id
                         referred_profile = Profile.objects.get(telegram_id=referrer_id)
-                        referred_profile.points += 10
+                        global_points = GlobalPoints.get_instance()
+                        referred_profile.points += global_points.referral_points
                         referred_profile.save()
 
             if 'first_name' in data['message']['chat']:

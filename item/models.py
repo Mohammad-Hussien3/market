@@ -143,3 +143,17 @@ class OrderPointItem(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.order.update()
+
+
+class GlobalPoints(models.Model):
+    referral_points = models.IntegerField(default=0)
+    purchase_points = models.IntegerField(default=0)
+    referral_purchase_points = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_instance(cls):
+        return cls.objects.get_or_create(pk=1)[0]

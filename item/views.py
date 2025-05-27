@@ -1,6 +1,6 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
-from item.models import Category, Item, Package, Order, PointItem, OrderItem, OrderPointItem, OrderPackage
-from item.serializers import ItemSerializer, PackageSerializer, NewCategorySerializer, CategorySerializer, OrderSerializer, PointItemSerializer
+from item.models import Category, Item, Package, Order, PointItem, OrderItem, OrderPointItem, OrderPackage, GlobalPoints
+from item.serializers import ItemSerializer, PackageSerializer, NewCategorySerializer, CategorySerializer, OrderSerializer, PointItemSerializer, GlobalPointsSerializer
 from rest_framework.views import Response, status
 from rest_framework import status
 from rest_framework.views import APIView
@@ -163,4 +163,19 @@ class CreateOrder(APIView):
 
         order.update()
 
+        address = data['address']
+        phone_number = data['phone_number']
+        name = data['name']
+
         return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+    
+
+class UpdateGlobalPointsView(APIView):
+    def patch(self, request):
+        instance = GlobalPoints.get_instance()
+        serializer = GlobalPointsSerializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

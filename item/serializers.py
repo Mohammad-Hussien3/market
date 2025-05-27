@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Item, Order, Package, PointItem, OrderItem, OrderPointItem, OrderPackage
+from .models import Category, Item, Order, Package, PointItem, OrderItem, OrderPointItem, OrderPackage, GlobalPoints
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -105,3 +105,9 @@ class OrderSerializer(serializers.ModelSerializer):
         del representation['package']
 
         return representation
+    
+
+class GlobalPointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GlobalPoints
+        fields = ['referral_points', 'purchase_points', 'referral_purchase_points']

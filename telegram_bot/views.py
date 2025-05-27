@@ -11,7 +11,7 @@ from rest_framework.views import Response, status
 from item.models import Order
 
 
-BOT_TOKEN = "7321345647:AAF_Z0ert8HS4Y-oMqhvgJZ0LIgt1T4g_G4"
+BOT_TOKEN = "7756641451:AAH83y2XqQfLXmaDfjnErT4z5lDNeoYpDA4"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 WEB_APP_URL = "https://nehad223.github.io/dsad/#/dsad/"
 
@@ -24,25 +24,27 @@ class Webhook(APIView):
 
         if "message" in data:
             chat_id = data['message']['chat']['id']
-            text = data['message']['text']
-            if text != '/start':
-                return JsonResponse({'status': 'error', 'message': 'الرسالة غير مدعومة، يرجى إرسال /start فقط'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            args = data.get('message', {}).get('text', '').split()
+            text = data['message'].get('text', '').strip()
+
+            if text.lower() != '/start':
+                return JsonResponse({'status': 'error', 'message': 'الرجاء إرسال /start فقط'}, status=400)
+
+            args = text.split()
             referrer_id = args[1] if len(args) > 1 else None
 
             profile, created = Profile.objects.get_or_create(telegram_id=chat_id)
 
-            if referrer_id != None:
-                text = args[0]
-                referrer_id = int(referrer_id)
-                if referrer_id != chat_id:
-                    if profile.referred_by == None:
+            if referrer_id is not None:
+                try:
+                    referrer_id = int(referrer_id)
+                    if referrer_id != chat_id and profile.referred_by is None:
                         profile.referred_by = referrer_id
                         referred_profile = Profile.objects.get(telegram_id=referrer_id)
                         global_points = GlobalPoints.get_instance()
                         referred_profile.points += global_points.referral_points
                         referred_profile.save()
+                except (ValueError, Profile.DoesNotExist):
+                    pass
 
             if 'first_name' in data['message']['chat']:
                 profile.first_name = data['message']['chat']['first_name']
@@ -55,9 +57,8 @@ class Webhook(APIView):
 
             profile.save()
 
-            if text == '/start':
-                self.send_welcome_message(chat_id)
-                self.send_menu(chat_id)
+            self.send_welcome_message(chat_id)
+            self.send_menu(chat_id)
 
         elif 'callback_query' in data:
             callback_data = data['callback_query']['data']

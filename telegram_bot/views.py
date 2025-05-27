@@ -11,7 +11,7 @@ from rest_framework.views import Response, status
 from item.models import Order
 
 
-BOT_TOKEN = "7668286931:AAHkvD2FyU2wTF5YuAs4_j0yq8hTsowO1Xw"
+BOT_TOKEN = "8073919877:AAFmYTtv6uc2GT3SmE8twqh73HNCFXJtuR8"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 WEB_APP_URL = "https://nehad223.github.io/dsad/#/dsad/"
 

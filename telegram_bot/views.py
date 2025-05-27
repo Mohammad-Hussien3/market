@@ -21,8 +21,6 @@ class Webhook(APIView):
     def post(self, request):
         
         data = json.loads(request.body)
-
-        print(data)
         if "message" in data:
             chat_id = data['message']['chat']['id']
             text = data['message'].get('text', '').strip()

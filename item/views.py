@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 import json
 from usermanagament.models import Profile
+from django.db import models
 
 # Create your views here.
 
@@ -163,19 +164,39 @@ class CreateOrder(APIView):
 
         order.update()
 
+        active_type = data['active_type']
+        if active_type == 'price':
+            global_points = GlobalPoints.get_instance()
+            profile.points += order.total_price // global_points.purchase_points
+            profile.save()
+            refferal_profile = get_object_or_404(Profile, telegram_id=profile.referred_by)
+            refferal_profile.points += order.total_price // global_points.referral_purchase_points
+            refferal_profile.save()
+
         address = data['address']
         phone_number = data['phone_number']
         name = data['name']
 
         return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
-    
 
-class UpdateGlobalPointsView(APIView):
-    def patch(self, request):
-        instance = GlobalPoints.get_instance()
-        serializer = GlobalPointsSerializer(instance, data=request.data, partial=True)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CategoryList(ListAPIView):
+    serializer_class = NewCategorySerializer
+
+    def get_queryset(self):
+        return Category.objects.order_by(
+            models.Case(
+                models.When(category_type='student', then=0),
+                models.When(category_type='doctor', then=1),
+                output_field=models.IntegerField()
+            ),
+            '-created_at'
+        )
+
+
+class UpdateGlobalPointsView(UpdateAPIView):
+    queryset = GlobalPoints.objects.all()
+    serializer_class = GlobalPointsSerializer
+
+    def get_object(self):
+        return GlobalPoints.get_instance()

@@ -13,6 +13,7 @@ urlpatterns = [
     path('search/<str:category_type>/<str:text>/', Search.as_view(), name='search'),
     path('searchpackage/<str:text>/', SearchPackage.as_view(), name='search'),
     path('createorder/',CreateOrder.as_view(), name='createOrder'),
+    path('categorylist/', CategoryList.as_view(), name='categoryList'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
     path('newcategory/', CreateCategory.as_view(), name='createitem'),

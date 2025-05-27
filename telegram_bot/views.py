@@ -26,7 +26,7 @@ class Webhook(APIView):
             chat_id = data['message']['chat']['id']
             text = data['message']['text']
             if text != '/start':
-                return
+                return JsonResponse({'status': 'error', 'message': 'الرسالة غير مدعومة، يرجى إرسال /start فقط'}, status=status.HTTP_400_BAD_REQUEST)
             
             args = data.get('message', {}).get('text', '').split()
             referrer_id = args[1] if len(args) > 1 else None

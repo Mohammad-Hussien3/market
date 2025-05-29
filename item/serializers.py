@@ -100,9 +100,6 @@ class OrderSerializer(serializers.ModelSerializer):
         elif instance.active_type == 'point':
             representation['points'] = instance.total_points
 
-        del representation['item']
-        del representation['point_item']
-        del representation['package']
 
         return representation
     

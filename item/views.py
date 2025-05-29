@@ -159,6 +159,7 @@ class CreateOrder(APIView):
             OrderPackage.objects.create(order=order, package=package, quantity=package_data['quantity'])
 
         for point_item_data in data.get('point_items', []):
+            print(point_item_data['point_item_id'])
             point_item = get_object_or_404(PointItem, id=point_item_data['point_item_id'])
             OrderPointItem.objects.create(order=order, point_item=point_item, quantity=point_item_data['quantity'])
 

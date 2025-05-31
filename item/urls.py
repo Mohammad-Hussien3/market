@@ -16,6 +16,7 @@ urlpatterns = [
     path('categorylist/', CategoryList.as_view(), name='categoryList'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
+    path('newpointitem/', CreatePointItem.as_view(), name='createpointitem'),
     path('newcategory/', CreateCategory.as_view(), name='createitem'),
     path('newpackage/', CreatePackage.as_view(), name='createpackage'),
 

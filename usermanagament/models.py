@@ -19,3 +19,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.username if self.username else str(self.telegram_id)
+
+
+class Admin(models.Model):
+    admin_password = models.CharField(max_length=40, default=1234)
+    sub_admin_password = models.CharField(max_length=40, default=123)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_instance(cls):
+        return cls.objects.get_or_create(pk=1)[0]

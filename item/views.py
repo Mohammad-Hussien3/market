@@ -172,15 +172,15 @@ class CreateOrder(APIView):
 
         order.update()
 
-        active_type = data['active_type']
-        if active_type == 'price':
-            global_points = GlobalPoints.get_instance()
-            profile.points += order.total_price // global_points.purchase_points
-            profile.save()
-            if profile.referred_by is not None:
-                refferal_profile = get_object_or_404(Profile, telegram_id=profile.referred_by)
-                refferal_profile.points += order.total_price // global_points.referral_purchase_points
-                refferal_profile.save()
+        # active_type = data['active_type']
+        # if active_type == 'price':
+        #     global_points = GlobalPoints.get_instance()
+        #     profile.points += order.total_price // global_points.purchase_points
+        #     profile.save()
+        #     if profile.referred_by is not None:
+        #         refferal_profile = get_object_or_404(Profile, telegram_id=profile.referred_by)
+        #         refferal_profile.points += order.total_price // global_points.referral_purchase_points
+        #         refferal_profile.save()
 
         address = data['address']
         phone_number = data['phone_number']

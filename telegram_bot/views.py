@@ -154,7 +154,7 @@ class Webhook(APIView):
                 message += "الطلبات :\n"
                 for order_point_item in order.orderpointitem_set.all():
                     message += f"  - {order_point_item.quantity} × {order_point_item.point_item.name}\n"
-                message += f"إجمالي النقاط: {order.total_points_items}\n"
+                message += f"إجمالي النقاط: {order.total_points}\n"
 
             message += '\n'
 
@@ -200,7 +200,7 @@ class Webhook(APIView):
                 message += "المشتريات :\n"
                 for order_point_item in order.orderpointitem_set.all():
                     message += f"  - {order_point_item.quantity} × {order_point_item.point_item.name}\n"
-                message += f"إجمالي النقاط: {order.total_points_items}\n"
+                message += f"إجمالي النقاط: {order.total_points}\n"
 
             message += '\n'
 

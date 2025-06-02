@@ -221,7 +221,8 @@ class UpdateGlobalPointsView(UpdateAPIView):
 
 class GetOrders(APIView):
 
-    def get(self, request, telegram_id, status):
-        orders = Order.objects.filter(profile__telegram_id=telegram_id, status=status)
+    def get(self, request, status, active_type):
+        orders = Order.objects.filter(status=status, active_type=active_type)
         jsonOrders = OrderSerializer(orders, many=True).data
         return Response(jsonOrders)
+    

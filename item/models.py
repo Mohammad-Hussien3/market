@@ -66,7 +66,7 @@ class Package(models.Model):
 
 class Order(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='orders')
-    customer_info = models.JSONField()
+    customer_info = models.JSONField(blank=True, null=True)
     status = models.CharField(max_length=20, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     purchased_at = models.DateTimeField(null=True, blank=True, default=None)

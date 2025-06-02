@@ -84,7 +84,7 @@ class DeleteItem(DestroyAPIView):
     lookup_field = 'id'
 
 
-class DeleteItem(DestroyAPIView):
+class DeletePointItem(DestroyAPIView):
     queryset = PointItem.objects.all()
     serializer_class = PointItemSerializer
     lookup_field = 'id'
@@ -124,14 +124,6 @@ class UpdatePackage(UpdateAPIView):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
     lookup_field = 'id'
-
-
-class GetOrders(APIView):
-
-    def get(self, request, telegram_id, status):
-        orders = Order.objects.filter(profile__telegram_id=telegram_id, status=status)
-        jsonOrders = OrderSerializer(orders, many=True).data
-        return Response(jsonOrders)
 
 
 class GetPointItmes(ListAPIView):
@@ -194,6 +186,14 @@ class CreateOrder(APIView):
         phone_number = data['phone_number']
         name = data['name']
 
+        order.customer_info = {
+            'name':name,
+            'phone_number':phone_number,
+            'address':address
+        }
+        order.save()
+
+
         return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
 
 
@@ -217,3 +217,11 @@ class UpdateGlobalPointsView(UpdateAPIView):
 
     def get_object(self):
         return GlobalPoints.get_instance()
+    
+
+class GetOrders(APIView):
+
+    def get(self, request, telegram_id, status):
+        orders = Order.objects.filter(profile__telegram_id=telegram_id, status=status)
+        jsonOrders = OrderSerializer(orders, many=True).data
+        return Response(jsonOrders)

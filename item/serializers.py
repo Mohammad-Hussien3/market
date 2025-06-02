@@ -89,7 +89,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'profile', 'status', 'created_at', 'items', 'purchased_at', 'point_items', 'packages', 'active_type']
+        fields = ['id', 'profile', 'status', 'created_at', 'items', 'purchased_at', 'point_items', 'packages', 'active_type', 'customer_info']
 
     
     def to_representation(self, instance):

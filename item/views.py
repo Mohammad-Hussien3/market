@@ -84,6 +84,12 @@ class DeleteItem(DestroyAPIView):
     lookup_field = 'id'
 
 
+class DeleteItem(DestroyAPIView):
+    queryset = PointItem.objects.all()
+    serializer_class = PointItemSerializer
+    lookup_field = 'id'
+
+
 class DeleteCategory(DestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -99,6 +105,12 @@ class DeletePackage(DestroyAPIView):
 class UpdateItem(UpdateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    lookup_field = 'id'
+
+
+class UpdatePointItem(UpdateAPIView):
+    queryset = PointItem.objects.all()
+    serializer_class = PointItemSerializer
     lookup_field = 'id'
 
 

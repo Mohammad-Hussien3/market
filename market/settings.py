@@ -21,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY'),
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-#2umq+n%(h%qpr94x12+s@23!kgqvg43)#ey7bok4vhk8uxv74'),
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'market-cwgu.onrender.com', 'api.telegram.org', 'weak-jars-count.loca.lt']
+ALLOWED_HOSTS = ['127.0.0.1', 'market-cwgu.onrender.com', 'api.telegram.org', 'pretty-cooks-exist.loca.lt']
 
 
 # Application definition
@@ -139,7 +139,7 @@ import cloudinary.api
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dgocqho3b'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY', '692564515676478'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', '2TfqhRWfeexmENoghJY_wZCC9Xo'),
 }
 
 cloudinary.config(

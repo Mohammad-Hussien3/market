@@ -139,21 +139,22 @@ class Webhook(APIView):
 
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
 
-            if order.active_type == "item":
+            if order.active_type == "price":
                 message += "المشتريات :\n"
                 for order_item in order.orderitem_set.all():
                     message += f"  - {order_item.quantity} × {order_item.item.name}\n"
-                message += f"السعر الكلي: {order.total_price_items}\n"
 
-            elif order.active_type == "point_item":
+                message += f"المشتريات :\n"
+                for order_package in order.orderpackage_set.all():
+                    message += f"  - {order_package.quantity} × {order_package.package.name}\n"
+
+                message += f"السعر الكلي: : {order.total_price}\n"
+
+            elif order.active_type == "point":
                 message += "المشتريات :\n"
                 for order_point_item in order.orderpointitem_set.all():
                     message += f"  - {order_point_item.quantity} × {order_point_item.point_item.name}\n"
                 message += f"إجمالي النقاط: {order.total_points_items}\n"
-
-            elif order.active_type == "package":
-                message += f"المشتريات: {order.package.name}\n"
-                message += f"السعر : {order.package.price}\n"
 
             message += '\n'
 

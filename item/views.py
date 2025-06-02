@@ -186,11 +186,11 @@ class CreateOrder(APIView):
         phone_number = data['phone_number']
         name = data['name']
 
-        order.customer_info = {
+        order.customer_info.add({
             'name':name,
             'phone_number':phone_number,
             'address':address
-        }
+        })
         order.save()
 
 

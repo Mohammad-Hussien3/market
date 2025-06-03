@@ -22,8 +22,8 @@ class Profile(models.Model):
 
 
 class Admin(models.Model):
-    admin_password = models.CharField(max_length=40, default=1234)
-    sub_admin_password = models.CharField(max_length=40, default=123)
+    admin_password = models.CharField(max_length=40, default='1234')
+    sub_admin_password = models.CharField(max_length=40, default='123')
 
     def save(self, *args, **kwargs):
         self.pk = 1

@@ -3,17 +3,18 @@ from rest_framework.views import APIView, Response, status
 
 class UpdatePassword(APIView):
 
-    def put(self, request):
+    def patch(self, request):
         data = request.data
         old_password = data['old_password']
         new_password = data['new_password']
-        if Admin.admin_password == old_password or Admin.sub_admin_password == old_password:
-            if Admin.admin_password == old_password:
-                Admin.admin_password = new_password
-                Admin.save()
+        admin = Admin.get_instance()
+        if admin.admin_password == old_password or admin.sub_admin_password == old_password:
+            if admin.admin_password == old_password:
+                admin.admin_password = new_password
+                admin.save()
             else:
-                Admin.sub_admin_password = new_password
-                Admin.save()
+                admin.sub_admin_password = new_password
+                admin.save()
             
             return Response({'success':'success'}, status=status.HTTP_200_OK)
         

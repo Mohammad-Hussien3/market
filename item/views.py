@@ -171,17 +171,6 @@ class CreateOrder(APIView):
             OrderPointItem.objects.create(order=order, point_item=point_item, quantity=point_item_data['quantity'])
 
         order.update()
-
-        # active_type = data['active_type']
-        # if active_type == 'price':
-        #     global_points = GlobalPoints.get_instance()
-        #     profile.points += order.total_price // global_points.purchase_points
-        #     profile.save()
-        #     if profile.referred_by is not None:
-        #         refferal_profile = get_object_or_404(Profile, telegram_id=profile.referred_by)
-        #         refferal_profile.points += order.total_price // global_points.referral_purchase_points
-        #         refferal_profile.save()
-
         address = data['address']
         phone_number = data['phone_number']
         name = data['name']
@@ -237,7 +226,7 @@ class GetOrder(RetrieveAPIView):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
     lookup_field = 'id'
-    
+
 
 class MakeOrderDelivery(APIView):
 
@@ -256,5 +245,12 @@ class MakeOrderFinished(APIView):
         order.status = 'finished'
         order.save()
 
-            
+        if order.active_type == 'price':
+            global_points = GlobalPoints.get_instance()
+            order.profile.points += order.total_price // global_points.purchase_points
+            order.profile.save()
+            if order.profile.referred_by is not None:
+                refferal_profile = get_object_or_404(Profile, telegram_id=order.profile.referred_by)
+                refferal_profile.points += order.total_price // global_points.referral_purchase_points
+                refferal_profile.save()
         return Response({'success':'success'}, status=status.HTTP_200_OK)

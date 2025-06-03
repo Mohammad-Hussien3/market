@@ -233,6 +233,12 @@ class GetOrders(APIView):
         return Response(jsonOrders)
 
 
+class GetOrder(RetrieveAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    lookup_field = 'id'
+    
+
 class MakeOrderDelivery(APIView):
 
     def patch(self, request, order_id):

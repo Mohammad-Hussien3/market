@@ -9,6 +9,7 @@ urlpatterns = [
     path('packages/', GetPackages.as_view(), name='getpackages'),
     path('getitems/', AllItems.as_view(), name='allitems'),
     path('getorders/<str:active_type>/', GetOrders.as_view(), name='getorders'),
+    path('getorder/<int:id>/', GetOrder.as_view(), name='getorder'),
     path('getpointitems/', GetPointItmes.as_view(), name='getpointitems'),
     path('search/<str:category_type>/<str:text>/', Search.as_view(), name='search'),
     path('searchpackage/<str:text>/', SearchPackage.as_view(), name='search'),

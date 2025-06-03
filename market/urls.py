@@ -8,4 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('bot/', include('telegram_bot.urls')),
     path('', include('item.urls')),
+    path('', include('usermanagament.urls')),
 ]

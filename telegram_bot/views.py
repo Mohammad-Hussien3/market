@@ -121,7 +121,7 @@ class Webhook(APIView):
         requests.post(TELEGRAM_API_URL, json=payload)
 
     def send_pending_orders(self, chat_id):
-        orders = Order.objects.filter(profile__telegram_id=chat_id, status='pending')
+        orders = Order.objects.filter(profile__telegram_id=chat_id, status__in=['pending', 'finished'])
         if not orders.exists():
             payload = {
                 "chat_id": chat_id,
@@ -131,6 +131,10 @@ class Webhook(APIView):
             return
 
         message = 'الطلبات المعلقة\n\n'
+        if order.status == 'delivery':
+            message = f'حالة الطلب: قيد التوصيل\n\n'
+        else:
+            message = f'حالة الطلب: انتظار القبول\n\n'
 
         idx = 1
         for order in orders:

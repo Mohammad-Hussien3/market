@@ -221,8 +221,8 @@ class UpdateGlobalPointsView(UpdateAPIView):
 
 class GetOrders(APIView):
 
-    def get(self, request, status, active_type):
-        orders = Order.objects.filter(status=status, active_type=active_type)
+    def get(self, request, active_type):
+        orders = Order.objects.filter(status__in=['delivery', 'pending'], active_type=active_type)
         jsonOrders = OrderSerializer(orders, many=True).data
         return Response(jsonOrders)
 
@@ -235,3 +235,12 @@ class MakeOrderDelivery(APIView):
         order.save()
         return Response({'success':'success'}, status=status.HTTP_200_OK)
     
+
+
+class MakeOrderFinished(APIView):
+
+    def patch(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        order.status = 'finished'
+        order.save()
+        return Response({'success':'success'}, status=status.HTTP_200_OK)

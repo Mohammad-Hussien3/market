@@ -225,7 +225,17 @@ class HomePage(ListAPIView):
         return queryset
     
 
-class GetUserPhotoAndPoints(APIView):
+class GetUserPoints(APIView):
+
+    def get(self, request, user_id):
+        
+        profile = Profile.objects.get(telegram_id=user_id)
+    
+        return Response({'points' : profile.points})
+
+    
+
+class GetUserPhoto(APIView):
 
     def get(self, request, user_id):
 
@@ -252,7 +262,5 @@ class GetUserPhotoAndPoints(APIView):
         file_path = file_info['result']['file_path']
 
         photo_url = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file_path}'
-        
-        profile = Profile.objects.get(telegram_id=user_id)
-    
-        return Response({'photo_url': photo_url, 'points' : profile.points})
+            
+        return Response({'photo_url': photo_url})

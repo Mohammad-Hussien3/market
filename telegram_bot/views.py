@@ -138,9 +138,9 @@ class Webhook(APIView):
             idx += 1
 
             if order.status == 'delivery':
-                message = f'حالة الطلب: قيد التوصيل\n\n'
+                message += f'حالة الطلب: قيد التوصيل\n\n'
             else:
-                message = f'حالة الطلب: انتظار القبول\n\n'
+                message += f'حالة الطلب: انتظار القبول\n\n'
                 
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
 

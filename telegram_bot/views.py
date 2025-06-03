@@ -131,16 +131,17 @@ class Webhook(APIView):
             return
 
         message = 'الطلبات المعلقة\n\n'
-        if order.status == 'delivery':
-            message = f'حالة الطلب: قيد التوصيل\n\n'
-        else:
-            message = f'حالة الطلب: انتظار القبول\n\n'
 
         idx = 1
         for order in orders:
             message += f'{idx}-\n'
             idx += 1
 
+            if order.status == 'delivery':
+                message = f'حالة الطلب: قيد التوصيل\n\n'
+            else:
+                message = f'حالة الطلب: انتظار القبول\n\n'
+                
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
 
             if order.active_type == "price":

@@ -121,7 +121,7 @@ class Webhook(APIView):
         requests.post(TELEGRAM_API_URL, json=payload)
 
     def send_pending_orders(self, chat_id):
-        orders = Order.objects.filter(profile__telegram_id=chat_id, status__in=['pending', 'finished'])
+        orders = Order.objects.filter(profile__telegram_id=chat_id, status__in=['pending', 'delivery'])
         if not orders.exists():
             payload = {
                 "chat_id": chat_id,
@@ -186,7 +186,7 @@ class Webhook(APIView):
             idx += 1
 
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
-            message += f"تاريخ الشراء: {order.purchased_at.strftime('%Y-%m-%d %H:%M')}\n"
+            message += f"تاريخ القبول: {order.purchased_at.strftime('%Y-%m-%d %H:%M')}\n"
 
             print(order.purchased_at)
 

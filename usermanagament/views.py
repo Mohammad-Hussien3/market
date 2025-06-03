@@ -10,9 +10,13 @@ class UpdatePassword(APIView):
         admin = Admin.get_instance()
         if admin.admin_password == old_password or admin.sub_admin_password == old_password:
             if admin.admin_password == old_password:
+                if new_password == admin.sub_admin_password:
+                    return Response({'error':'error'}, status=status.HTTP_404_NOT_FOUND)
                 admin.admin_password = new_password
                 admin.save()
             else:
+                if new_password == admin.admin_password:
+                    return Response({'error':'error'}, status=status.HTTP_404_NOT_FOUND)
                 admin.sub_admin_password = new_password
                 admin.save()
             

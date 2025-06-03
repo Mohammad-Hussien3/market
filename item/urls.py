@@ -14,6 +14,7 @@ urlpatterns = [
     path('searchpackage/<str:text>/', SearchPackage.as_view(), name='search'),
     path('createorder/',CreateOrder.as_view(), name='createOrder'),
     path('categorylist/', CategoryList.as_view(), name='categoryList'),
+    path('makeorderdelivery/<int:order_id>/', MakeOrderDelivery.as_view(), name='makeorderdelivery'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
     path('newpointitem/', CreatePointItem.as_view(), name='createpointitem'),

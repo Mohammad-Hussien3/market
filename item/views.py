@@ -225,4 +225,13 @@ class GetOrders(APIView):
         orders = Order.objects.filter(status=status, active_type=active_type)
         jsonOrders = OrderSerializer(orders, many=True).data
         return Response(jsonOrders)
+
+
+class MakeOrderDelivery(APIView):
+
+    def patch(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id)
+        order.status = 'delivery'
+        order.save()
+        return Response({'success':'success'}, status=status.HTTP_200_OK)
     

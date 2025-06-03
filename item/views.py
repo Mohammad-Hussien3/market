@@ -210,6 +210,12 @@ class CategoryList(ListAPIView):
             '-created_at'
         )
 
+    
+class GetCategory(RetrieveAPIView):
+    serializer_class = NewCategorySerializer
+    queryset = Category.objects.all()
+    lookup_field = 'id'
+
 
 class UpdateGlobalPointsView(UpdateAPIView):
     queryset = GlobalPoints.objects.all()

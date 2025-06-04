@@ -58,7 +58,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['item_name'] = instance.item.name
         representation['price'] = instance.item.price
-        representation['photo'] = instance.item.photo
+        representation['photo'] = instance.item.photo.url
         return representation
 
 
@@ -71,7 +71,7 @@ class OrderPointItemSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['point_item_name'] = instance.point_item.name
         representation['points'] = instance.item.points
-        representation['photo'] = instance.item.photo
+        representation['photo'] = instance.item.photo.url
         return representation
     
     
@@ -84,7 +84,7 @@ class OrderPackageSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['package_name'] = instance.package.name
         representation['price'] = instance.item.price
-        representation['photo'] = instance.item.photo
+        representation['photo'] = instance.item.photo.url
         return representation
 
 

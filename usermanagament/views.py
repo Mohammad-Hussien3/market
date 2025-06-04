@@ -28,7 +28,7 @@ class UpdatePassword(APIView):
 
 class LogIn(APIView):
 
-    def get(self, request, password):
+    def post(self, request):
         data = request.data
         password = data['password']
         admin = Admin.get_instance()

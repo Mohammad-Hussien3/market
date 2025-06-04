@@ -83,6 +83,8 @@ class OrderPackageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['package_name'] = instance.package.name
+        representation['price'] = instance.package.price
+        representation['photo'] = instance.package.photo.url
         return representation
 
 

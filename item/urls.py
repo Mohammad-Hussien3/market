@@ -18,6 +18,7 @@ urlpatterns = [
     path('makeorderdelivery/<int:order_id>/', MakeOrderDelivery.as_view(), name='makeorderdelivery'),
     path('makeorderfinished/<int:order_id>/', MakeOrderFinished.as_view(), name='makeorderfinished'),
     path('getcategory/<int:id>/', GetCategory.as_view(), name='getcategory'),
+    path('finishedorders/', GetFinishedOrders.as_view(), name='finishedorders'),
 
     path('newitem/', CreateItem.as_view(), name='createitem'),
     path('newpointitem/', CreatePointItem.as_view(), name='createpointitem'),

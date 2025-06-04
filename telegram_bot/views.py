@@ -188,7 +188,6 @@ class Webhook(APIView):
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
             message += f"تاريخ القبول: {order.purchased_at.strftime('%Y-%m-%d %H:%M')}\n"
 
-            print(order.purchased_at)
 
             if order.active_type == "price":
                 message += "مشتريات العناصر :\n"

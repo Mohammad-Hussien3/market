@@ -260,3 +260,45 @@ class MakeOrderFinished(APIView):
                 refferal_profile.points += order.total_price // global_points.referral_purchase_points
                 refferal_profile.save()
         return Response({'success':'success'}, status=status.HTTP_200_OK)
+
+
+class GetFinishedOrders(APIView):
+    
+    def get(self, request):
+        orders = Order.objects.filter(status='finished')
+
+        json_orders = []
+
+        for order in orders:
+
+            json_order = {}
+            json_order['customer_info'] = order.customer_info
+            json_order['تاريخ الطلب:'] = order.created_at.strftime('%Y-%m-%d %H:%M')
+            json_order['تاريخ القبول:'] = order.purchased_at.strftime('%Y-%m-%d %H:%M')
+            if order.active_type == "price":
+                sells = []
+                for order_item in order.orderitem_set.all():
+                    sells.append(f"  - {order_item.quantity} × {order_item.item.name}")
+                
+                json_order["مشتريات العناصر :"] = sells.copy()
+                
+                sells.clear()
+                
+                for order_package in order.orderpackage_set.all():
+                    sells.append(f"  - {order_package.quantity} × {order_package.package.name}")
+                json_order[f"مشتريات البكجات :"] = sells.copy()
+
+                json_order["السعر الكلي:"] =  order.total_price
+
+            elif order.active_type == "point":
+                sells = []
+                for order_point_item in order.orderpointitem_set.all():
+                    sells.append(f"  - {order_point_item.quantity} × {order_point_item.point_item.name}")
+                
+                json_order["المشتريات :"] = sells
+
+                json_order["إجمالي النقاط:"] = order.total_points
+
+            json_orders.append(json_order)
+        
+        return Response(json_orders, status=status.HTTP_200_OK)

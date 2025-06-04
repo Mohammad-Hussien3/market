@@ -70,8 +70,8 @@ class OrderPointItemSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['point_item_name'] = instance.point_item.name
-        representation['points'] = instance.item.points
-        representation['photo'] = instance.item.photo.url
+        representation['points'] = instance.point_item.points
+        representation['photo'] = instance.point_item.photo.url
         return representation
     
     

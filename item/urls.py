@@ -28,6 +28,7 @@ urlpatterns = [
     path('deletepointitem/<int:id>/', DeletePointItem.as_view(), name='deletepointitem'),
     path('deletecategory/<int:id>/', DeleteCategory.as_view(), name='deletecategory'),
     path('deletepackage/<int:id>/', DeletePackage.as_view(), name='deletepakcage'),
+    path('deleteorder/<int:id>/', DeleteOrder.as_view(), name='deleteorder'),
 
     path('edititem/<int:id>/', UpdateItem.as_view(), name='edititem'),
     path('editpointitem/<int:id>/', UpdatePointItem.as_view(), name='edieditpointitemtitem'),

@@ -228,6 +228,12 @@ class GetOrder(RetrieveAPIView):
     lookup_field = 'id'
 
 
+class DeleteOrder(DestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    lookup_field = 'id'
+
+
 class MakeOrderDelivery(APIView):
 
     def patch(self, request, order_id):

@@ -24,3 +24,17 @@ class UpdatePassword(APIView):
         
         else:
             return Response({'error':'error'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class LogIn(APIView):
+
+    def get(self, request, password):
+        data = request.data
+        password = data['password']
+        admin = Admin.get_instance()
+        if admin.admin_password == password:
+            return Response({'status':'admin'}, status=status.HTTP_200_OK)
+        elif admin.sub_admin_password == password:
+            return Response({'status':'sub_admin'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status':'error'}, status=status.HTTP_404_NOT_FOUND)

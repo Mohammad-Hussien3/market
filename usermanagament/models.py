@@ -1,6 +1,6 @@
 from django.db import models
 
-BOT_USERNAME = 'markettest_bot'
+BOT_USERNAME = 'dental_kit_store_bot'
 
 
 class Profile(models.Model):

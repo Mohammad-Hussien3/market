@@ -11,7 +11,7 @@ from rest_framework.views import Response, status
 from item.models import Order
 
 
-BOT_TOKEN = "8106559526:AAE5iBsXiXcpSf_r8ctqKoRNhJfjVEQ1OgA"
+BOT_TOKEN = "8405178345:AAFhjXPbUCS4y_amT3mkXDnFyeHUO869RKU"
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 WEB_APP_URL = "https://nehad223.github.io/dsad/#/dsad/"
 
@@ -187,7 +187,6 @@ class Webhook(APIView):
 
             message += f"تاريخ الطلب: {order.created_at.strftime('%Y-%m-%d %H:%M')}\n"
             message += f"تاريخ القبول: {order.purchased_at.strftime('%Y-%m-%d %H:%M')}\n"
-
 
             if order.active_type == "price":
                 message += "مشتريات العناصر :\n"

@@ -38,3 +38,9 @@ class LogIn(APIView):
             return Response({'status':'sub_admin'}, status=status.HTTP_200_OK)
         else:
             return Response({'status':'error'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class Test(APIView):
+
+    def get(self, request):
+        return Response({'status':'success'}, status=status.HTTP_200_OK)
